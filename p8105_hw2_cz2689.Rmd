@@ -1,0 +1,11 @@
+---
+title: "HW2"
+author: "Chaoqun Zhou"
+date: 2022-10-04
+output: github_document
+---
+
+```{r}
+
+```
+
