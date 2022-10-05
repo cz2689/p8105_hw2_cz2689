@@ -22,7 +22,7 @@ raw = read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>
 p1 = select(raw, line, station_name, station_latitude, station_longitude,
     route1:route11, entrance_type, entry, vending, ada) %>% 
     mutate(entry = recode(entry, YES = "TRUE", NO = "FALSE"),
-         entry = as.logical(entry))
+         entry = as.logical(entry)) 
 ```
 
 ## Describe the data:
@@ -31,10 +31,30 @@ This data set is about NYC Transit data. So far, I have import the data into R. 
 ## Answer questions:
 
 ```{r, message = FALSE}
-x = distinct(p1, line, station_name)
+x = distinct(p1, line, station_name, .keep_all = TRUE)
+mean(x$ada == 1)
+mean(x$vending == "NO")
 ```
 
 1. There are 465 distinct stations. 
+2. There are `r mean(x$ada == 1)` stations that are ADA compliant.
+3. There are `r mean(x$vending == "NO")` Stations that entrances / exits without vending.
+
+## Reformat data:
+```{r}
+re = mutate(p1, route8 = as.character(route8),
+            route9 = as.character(route9),
+            route10 = as.character(route10),
+            route11 = as.character(route11)) %>% 
+pivot_longer(route1:route11, names_to = "route_number", values_to = "route_name")
+```
+
+```{r, message = FALSE}
+y = distinct(re, line, station_name, .keep_all = TRUE)
+mean(y$route_name == "A")
+z = filter(y, route_name == c("A"))
+mean(z$ada == 1)
+```
 
 
 # Problem 2
