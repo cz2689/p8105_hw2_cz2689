@@ -40,7 +40,7 @@ x = distinct(p1, line, station_name)
 
 ## Data Import:
 
-Mr. Trash Wheel
+Mr. Trash Wheel:
 ```{r, message = FALSE}
 mrtw = read_excel("./data/Trash Wheel Collection Data.xlsx", 
                   sheet = "Mr. Trash Wheel", range = "A2:N549") %>% 
@@ -50,7 +50,7 @@ mrtw = read_excel("./data/Trash Wheel Collection Data.xlsx",
   mutate(which = "mrtw")
 ```
 
-Professor Trash Wheel
+Professor Trash Wheel:
 ```{r, message = FALSE}
 proftw = read_excel("./data/Trash Wheel Collection Data.xlsx", 
                     sheet = "Professor Trash Wheel", range = "A2:M96") %>% 
@@ -58,12 +58,54 @@ proftw = read_excel("./data/Trash Wheel Collection Data.xlsx",
   mutate(which = "proftw")
 ```
 
-Combine two data set
+Combine two data set:
 ```{r, message = FALSE}
 tw = merge(mrtw, proftw, all = TRUE)
 ```
 
 Two Trash Wheels data set were imported. And then combined into one data set called `tw`. The final data set `tw` has `r nrow(tw)`observations. And it includes variable: `r ls(tw)`. The total weight of trash collected by Professor Trash Wheel `r sum(proftw$weight_tons)` tons. The total number of sports balls collected by Mr. Trash Wheel in 2020 is `r sum(mrtw$sports_balls[mrtw$year == 2020])` tons.
+
+
+# Problem 3
+
+## Data Import and clean:
+
+Clean the data in pols-month:
+```{r, message = FALSE}
+pm = read_csv(file = "./data/pols-month.csv") %>% 
+    janitor::clean_names() %>% 
+    separate(mon, c("year", "month", "day"), convert = TRUE) %>% 
+    mutate(month = month.name[month]) %>% 
+    mutate(president = ifelse(prez_dem == 0, "gop", "dem")) %>% 
+    select(-prez_dem, -prez_gop, -day)
+```
+
+Clean the data in SNP:
+```{r, message = FALSE}
+snp = read_csv(file = "./data/snp.csv") %>% 
+    janitor::clean_names() %>% 
+    separate(date, c("month", "day", "year"), convert = TRUE) %>%
+    arrange(month) %>% 
+    mutate(month = month.name[month]) %>%
+    mutate(year = ifelse(50 <= year & year <= 90, year + 1900, year + 2000)) %>%
+    arrange(year) %>% 
+    select(-day) %>% 
+    relocate(year, month)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
