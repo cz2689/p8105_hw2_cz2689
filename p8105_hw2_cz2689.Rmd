@@ -6,6 +6,7 @@ output: github_document
 ---
 ```{r}
 library(tidyverse)
+library(readxl)
 ```
 
 
@@ -18,8 +19,8 @@ raw = read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>
   janitor::clean_names() 
 
 p1 = select(raw, line, station_name, station_latitude, station_longitude, route1:route11, entrance_type, entry, vending, ada) %>% 
-  mutate(entry = recode(entry, YES = "TRUE", NO = "FALSE")) %>% 
-  mutate(entry = as.logical(entry))
+  mutate(entry = recode(entry, YES = "TRUE", NO = "FALSE"),
+         entry = as.logical(entry))
 ```
 
 ## Describe the data:
@@ -27,6 +28,33 @@ p1 = select(raw, line, station_name, station_latitude, station_longitude, route1
 skimr::skim(p1)
 ```
 This data set is about NYC Transit data. So far, I have import the data into R. And use `janitor::clean_names()` to clean up variables names. And then I use `select()` to keep the columns that I want. And then I covert the entry variable from character to logical variable. Now, this data set has 19 columns and 1868 rows. It includes variables: `r ls(p1)`.These data looks tidy enough but it can be better. 
+
+## Answer questions:
+
+```{r}
+x = distinct(p1, line, station_name)
+```
+
+1. There are 465 distinct stations. 
+
+
+# Problem 2
+
+## Data Import:
+
+```{r}
+tw = read_excel("./data/Trash Wheel Collection Data.xlsx", sheet = "Mr. Trash Wheel", range = "A2:N549") %>% 
+  janitor::clean_names() %>% 
+  mutate(sports_balls = ceiling(sports_balls), 
+         sports_balls = as.integer(sports_balls))
+```
+
+
+
+
+
+
+
 
 
 
