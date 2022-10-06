@@ -38,7 +38,7 @@ mean(x$vending == "NO")
 
 1. There are 465 distinct stations. 
 2. There are `r 465*mean(x$ada == 1)` distinct stations that are ADA compliant.
-3. There are `r 100*mean(x$vending == "NO")`% Stations that entrances / exits without vending.
+3. There are `r 100*mean(x$vending == "NO")`% distinct stations that entrances / exits without vending.
 
 ## Reformat data:
 ```{r, message = FALSE}
@@ -119,7 +119,7 @@ Clean the date in unemployment:
 ```{r, message = FALSE}
 un = read_csv(file = "./data/unemployment.csv") %>% 
     janitor::clean_names() %>% 
-    pivot_longer(jan:dec, names_to = "month", values_to = "percentage of unemployment") %>% 
+    pivot_longer(jan:dec, names_to = "month", values_to = "percentage_of_unemployment") %>% 
     mutate(month = str_to_title(month))
 ```
 
