@@ -30,18 +30,18 @@ This data set is about NYC Transit data. So far, I have import the data into R. 
 
 ## Answer questions:
 
-```{r, message = FALSE}
+```{r, message = FALSE, results = 'hide'}
 x = distinct(p1, line, station_name, .keep_all = TRUE)
 mean(x$ada == 1)
 mean(x$vending == "NO")
 ```
 
 1. There are 465 distinct stations. 
-2. There are `r mean(x$ada == 1)` stations that are ADA compliant.
-3. There are `r mean(x$vending == "NO")` Stations that entrances / exits without vending.
+2. There are `r 465*mean(x$ada == 1)` distinct stations that are ADA compliant.
+3. There are `r 100*mean(x$vending == "NO")`% Stations that entrances / exits without vending.
 
 ## Reformat data:
-```{r}
+```{r, message = FALSE}
 re = mutate(p1, route8 = as.character(route8),
             route9 = as.character(route9),
             route10 = as.character(route10),
@@ -49,13 +49,14 @@ re = mutate(p1, route8 = as.character(route8),
 pivot_longer(route1:route11, names_to = "route_number", values_to = "route_name")
 ```
 
-```{r, message = FALSE}
+```{r, message = FALSE,  results = 'hide'}
 y = distinct(re, line, station_name, .keep_all = TRUE)
 mean(y$route_name == "A")
 z = filter(y, route_name == c("A"))
 mean(z$ada == 1)
 ```
 
+There are `r 465*mean(y$route_name == "A")` distinct stations serve the A train. Of the stations that serve the A train, `r 60*mean(z$ada == 1)` are ADA compliant. 
 
 # Problem 2
 
@@ -84,7 +85,7 @@ Combine two data set:
 tw = merge(mrtw, proftw, all = TRUE)
 ```
 
-Two Trash Wheels data set were imported. And then combined into one data set called `tw`. The final data set `tw` has `r nrow(tw)`observations. And it includes variable: `r ls(tw)`. The total weight of trash collected by Professor Trash Wheel `r sum(proftw$weight_tons)` tons. The total number of sports balls collected by Mr. Trash Wheel in 2020 is `r sum(mrtw$sports_balls[mrtw$year == 2020])` tons.
+Two Trash Wheels data set were imported. And then combined into one data set called `tw`. The final data set `tw` has `r nrow(tw)` observations. And it includes variable: `r ls(tw)`. The total weight of trash collected by Professor Trash Wheel `r sum(proftw$weight_tons)` tons. The total number of sports balls collected by Mr. Trash Wheel in 2020 is `r sum(mrtw$sports_balls[mrtw$year == 2020])` tons.
 
 
 # Problem 3
